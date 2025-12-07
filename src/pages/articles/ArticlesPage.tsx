@@ -1,7 +1,7 @@
 import React from "react";
 import { ArticlesPageData, PageProps } from "../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
-import { articlesPageApiRoute } from "./articlesPageRoutes";
+import { articlesPageApiRoute } from "./articlesPageConstants";
 
 export const ArticlesPage: React.FC<PageProps<ArticlesPageData>> = ({
   data: _data,

@@ -1,7 +1,7 @@
 import React from "react";
 import { AboutPageData, PageProps } from "../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
-import { aboutPageApiRoute } from "./aboutPageRoutes";
+import { aboutPageApiRoute } from "./aboutPageConstants";
 
 export const AboutPage: React.FC<PageProps<AboutPageData>> = ({
   data: _data,

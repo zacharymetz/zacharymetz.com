@@ -34,8 +34,8 @@ const App: React.FC<AppProps> = ({ data }) => {
     <div
       style={{
         minHeight: "100vh",
-        width: "100vw",
-        overflow: "hidden",
+        width: "100%",
+        overflowX: "hidden",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -50,6 +50,8 @@ const App: React.FC<AppProps> = ({ data }) => {
           display: "flex",
           marginTop: "57px",
           justifyContent: "stretch",
+          width: "100%",
+          flexDirection: "column",
         }}
       >
         <Routes>

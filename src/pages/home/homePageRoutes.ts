@@ -1,16 +1,9 @@
 import { type Application, Request, Response } from "express";
 import { buildAppDataHelper } from "../../types/pageTypes";
 import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
-import {
-  API_ROUTES_ROOT,
-  HOME_PAGE_DESCRIPTION,
-  HOME_PAGE_TITLE,
-} from "../../constants";
+import { HOME_PAGE_DESCRIPTION, HOME_PAGE_TITLE } from "../../constants";
 import { getHomePageData } from "./homePageData";
-
-export const homePageRoute = "/";
-
-export const homePageApiRoute = API_ROUTES_ROOT + homePageRoute;
+import { homePageRoute, homePageApiRoute } from "./homePageConstants";
 
 export const homeRoutes = (app: Application) => {
   app.get(homePageRoute, async (req: Request, res: Response) => {

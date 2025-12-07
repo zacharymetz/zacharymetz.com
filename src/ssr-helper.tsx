@@ -15,9 +15,10 @@ const isProduction = process.env.NODE_ENV === "production";
 let manifest: Record<string, { file: string; css?: string[] }> | null = null;
 if (isProduction) {
   try {
+    // In production, ssr-helper.js is in dist/server/, manifest is in dist/client/
     const manifestPath = path.resolve(
       __dirname,
-      "../dist/client/.vite/manifest.json"
+      "../client/.vite/manifest.json"
     );
     manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
   } catch {
@@ -45,8 +46,16 @@ export function renderSSRPage(url: string, data: AppData): SSRResult {
 function getAssetTags(): { scripts: string; styles: string } {
   if (!isProduction) {
     // Development mode - Vite injects scripts via middleware
+    // React Fast Refresh preamble must come before any React modules
     return {
       scripts: `
+        <script type="module">
+          import RefreshRuntime from '/@react-refresh'
+          RefreshRuntime.injectIntoGlobalHook(window)
+          window.$RefreshReg$ = () => {}
+          window.$RefreshSig$ = () => (type) => type
+          window.__vite_plugin_react_preamble_installed__ = true
+        </script>
         <script type="module" src="/@vite/client"></script>
         <script type="module" src="/src/client.tsx"></script>
       `,
@@ -93,7 +102,11 @@ export function buildHTMLDocument(
   </head>
   <body>
     <div id="root">${html}</div>
-    ${isSSR ? `<script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>` : ""}
+    ${
+      isSSR
+        ? `<script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>`
+        : ""
+    }
     <script>window.__SSR__ = ${isSSR}</script>
     ${scripts}
   </body>

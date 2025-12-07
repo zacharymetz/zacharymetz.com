@@ -1,7 +1,9 @@
 import { CryptoType, useCryptoPrices } from "../hooks/useCryptoPrices";
+import { useDetectIsMobile } from "../hooks/useDetectIsMobile";
 
 export const SiteFooter = () => {
   const { tokensData, tokenPairs } = useCryptoPrices();
+  const { isMobile, isTablet, isMedium, isLarge } = useDetectIsMobile();
   return (
     <div
       style={{
@@ -41,28 +43,52 @@ export const SiteFooter = () => {
               alignItems: "center",
             }}
           >
-            <img
+            {/* <img
               src="/tropicalgalaxy.png"
               style={{
                 height: "32px",
                 marginRight: "16px",
               }}
-            />
-            <div style={{ fontSize: "16px!important" }}>
-              {" "}
-              &copy; Tropical Galaxy 2025
+            /> */}
+            <div style={{ fontSize: "14px!important" }}>
+              &copy; Zachary Metz 2025
             </div>
           </div>
+          <a
+            href="https://www.tropicalgalaxy.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              paddingLeft: "16px",
+              textDecoration: "none",
+            }}
+          >
+            <img
+              src="/tropicalgalaxy.png"
+              style={{
+                height: "14px",
+                marginRight: "4px",
+              }}
+            />
+            <span style={{ fontSize: "14px", color: "#666" }}>
+              Tropical Galaxy
+            </span>
+          </a>
           <div
             style={{
               display: "flex",
               alignItems: "stretch",
-              paddingLeft: "64px",
+              paddingLeft: "16px",
               flexWrap: "wrap",
+              flexDirection: isMedium || isLarge ? "row" : "column",
             }}
           >
             {/* Dynamically render token price displays */}
-            {tokenPairs.map((pair) => {
+            {tokenPairs.map((pair, index) => {
               const symbol = pair.split("-")[0] as CryptoType; // Extract symbol from pair (e.g., "BTC" from "BTC-USD")
               const tokenData = tokensData[pair] || {
                 price: 0,
@@ -73,7 +99,9 @@ export const SiteFooter = () => {
                 <div
                   key={pair}
                   style={{
-                    paddingLeft: "8px",
+                    paddingLeft:
+                      index > 0 ? (isMobile || isTablet ? "0" : "8px") : "0",
+                    paddingBottom: isMobile || isTablet ? "4px" : "0",
                     paddingRight: "8px",
                     display: "flex",
                     alignItems: "center",

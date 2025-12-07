@@ -10,8 +10,7 @@ export interface PageProps<T> {
  * to pre render the page
  */
 export interface HomePageData {
-  message: string;
-  timestamp: number;
+  highlightedArticles: Article[];
 }
 
 export interface AboutPageData {

@@ -1,8 +1,6 @@
-import { useDetectIsMobile } from "../hooks/useDetectIsMobile";
 import { InternalLink } from "./internalLink";
 
 const Header = () => {
-  const isMobile = useDetectIsMobile();
   return (
     <div
       style={{
@@ -17,7 +15,6 @@ const Header = () => {
         height: "56px",
         backgroundColor: "white",
         borderBottom: "1px solid #e0e0e0",
-        //padding: "0 16px",
       }}
     >
       <div
@@ -32,11 +29,16 @@ const Header = () => {
       >
         <div
           style={{
-            //paddingLeft: "64px",
             flexGrow: 1,
           }}
         >
-          <InternalLink href="/">
+          <InternalLink
+            href="/"
+            linkStyle={{
+              textDecoration: "none",
+              color: "black",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -44,19 +46,20 @@ const Header = () => {
                 gap: "8px",
               }}
             >
-              <img
+              {/* <img
                 src="/tropicalgalaxy.png"
                 alt="Blog.dev"
-                style={{ height: "32px" }}
-              />
-              <div
+                style={{ height: "28px" }}
+              /> */}
+              <span
                 style={{
                   fontSize: "18px",
-                  fontWeight: "bold",
+                  fontWeight: "500",
                 }}
               >
-                Tropical Construction
-              </div>
+                Zachary Metz
+                <span style={{ fontSize: "12px", color: "#666" }}>.com</span>
+              </span>
             </div>
           </InternalLink>
         </div>
@@ -66,8 +69,14 @@ const Header = () => {
             gap: "16px",
           }}
         >
-          <InternalLink href="/articles">Posts</InternalLink>
-          <InternalLink href="/about">About</InternalLink>
+          <InternalLink
+            href="/about"
+            linkStyle={{
+              textDecoration: "none",
+            }}
+          >
+            About
+          </InternalLink>
         </div>
       </div>
     </div>

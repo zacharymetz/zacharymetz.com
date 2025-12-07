@@ -1,16 +1,9 @@
 import { type Application, Request, Response } from "express";
 import { buildAppDataHelper } from "../../types/pageTypes";
 import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
-import {
-  API_ROUTES_ROOT,
-  ARTICLE_PAGE_DESCRIPTION,
-  ARTICLE_PAGE_TITLE,
-} from "../../constants";
+import { ARTICLE_PAGE_DESCRIPTION, ARTICLE_PAGE_TITLE } from "../../constants";
 import { getArticlePageData } from "./articlePageData";
-
-export const articlePageRoute = "/article/:id";
-
-export const articlePageApiRoute = API_ROUTES_ROOT + articlePageRoute;
+import { articlePageRoute, articlePageApiRoute } from "./articlePageConstants";
 
 export const articleRoutes = (app: Application) => {
   app.get(articlePageRoute, async (req: Request, res: Response) => {

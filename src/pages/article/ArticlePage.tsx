@@ -1,10 +1,12 @@
 import React from "react";
 import { ArticlePageData, PageProps } from "../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
-import { articlePageApiRoute } from "./articlePageRoutes";
+import { articlePageApiRoute } from "./articlePageConstants";
 
 const pageBreakLarge = 1280;
 const pageBreakMedium = 1024;
+
+const contentMaxWidth = 736;
 
 export const ArticlePage: React.FC<PageProps<ArticlePageData>> = ({
   data: _data,

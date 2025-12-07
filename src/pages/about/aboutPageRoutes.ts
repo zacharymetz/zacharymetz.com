@@ -1,16 +1,9 @@
 import { type Application, Request, Response } from "express";
 import { buildAppDataHelper } from "../../types/pageTypes";
 import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
-import {
-  API_ROUTES_ROOT,
-  ABOUT_PAGE_DESCRIPTION,
-  ABOUT_PAGE_TITLE,
-} from "../../constants";
+import { ABOUT_PAGE_DESCRIPTION, ABOUT_PAGE_TITLE } from "../../constants";
 import { getAboutPageData } from "./aboutPageData";
-
-export const aboutPageRoute = "/about";
-
-export const aboutPageApiRoute = API_ROUTES_ROOT + aboutPageRoute;
+import { aboutPageRoute, aboutPageApiRoute } from "./aboutPageConstants";
 
 export const aboutRoutes = (app: Application) => {
   app.get(aboutPageRoute, async (req: Request, res: Response) => {
