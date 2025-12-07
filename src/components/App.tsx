@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/global.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router";
 import { AppData } from "../types/pageTypes";
 import Header from "./shared/siteHeader";
 import { SiteFooter } from "./shared/siteFooter";
