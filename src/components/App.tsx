@@ -9,7 +9,6 @@ import { AboutPage } from "../pages/about/AboutPage";
 import { ArticlesPage } from "../pages/articles/ArticlesPage";
 import { ArticlePage } from "../pages/article/ArticlePage";
 import { useSSRContext } from "./hooks/useSSRContext";
-import { Scroller } from "./scroller";
 
 interface AppProps {
   data?: AppData; // Only passed during SSR on server
@@ -42,7 +41,6 @@ const App: React.FC<AppProps> = ({ data }) => {
         alignItems: "stretch",
       }}
     >
-      <Scroller />
       <Header />
       <div
         style={{

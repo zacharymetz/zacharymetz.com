@@ -21,6 +21,7 @@ export default defineConfig({
           "./src/pages/articles/articlesPageRoutes.ts",
         "pages/article/articlePageRoutes":
           "./src/pages/article/articlePageRoutes.ts",
+        "routes/robotsRoutes": "./src/routes/robotsRoutes.ts",
       },
       output: {
         entryFileNames: "[name].js",

@@ -94,7 +94,7 @@ const HomePageArticleList = ({ articles }: { articles: Article[] }) => {
         </thead>
         <tbody>
           {articles.map((article) => (
-            <tr key={article.id}>
+            <tr key={article.slug}>
               <td
                 style={{
                   whiteSpace: "nowrap",
@@ -110,7 +110,7 @@ const HomePageArticleList = ({ articles }: { articles: Article[] }) => {
                   fontWeight: "200",
                 }}
               >
-                5m
+                {article["time-to-read"]}
               </td>
               <td
                 style={{
@@ -120,7 +120,7 @@ const HomePageArticleList = ({ articles }: { articles: Article[] }) => {
                 }}
               >
                 <InternalLink
-                  href={`/article/${article.id}`}
+                  href={`/article/${article.slug}`}
                   linkStyle={{
                     textDecoration: "none",
                   }}

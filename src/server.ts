@@ -16,12 +16,23 @@ type RouteInitializer = (app: Application) => void;
 async function createServer() {
   const app = express();
 
+  // Remove Express default X-Powered-By header
+  app.disable("x-powered-by");
+
+  // Add .NET-like headers to all responses
+  app.use((_req: Request, res: Response, next) => {
+    res.setHeader("X-Powered-By", "ASP.NET");
+    res.setHeader("Server", "Microsoft-IIS/10.0");
+    next();
+  });
+
   let vite: ViteDevServer | undefined;
   let buildSPADocument: () => string;
   let homeRoutes: RouteInitializer;
   let aboutRoutes: RouteInitializer;
   let articlesRoutes: RouteInitializer;
   let articleRoutes: RouteInitializer;
+  let robotsRoutes: RouteInitializer;
 
   if (!isProduction) {
     // Development mode - use Vite's dev server as middleware
@@ -30,6 +41,14 @@ async function createServer() {
       server: { middlewareMode: true },
       appType: "custom",
     });
+
+    // Load robots.txt route module via Vite SSR loader (before adding middleware)
+    const robotsRoutesModule = await vite.ssrLoadModule(
+      "/src/routes/robotsRoutes.ts"
+    );
+    robotsRoutes = robotsRoutesModule.robotsRoutes;
+    // Register robots.txt route BEFORE Vite middleware so Express handles it
+    robotsRoutes(app);
 
     app.use(vite.middlewares);
 
@@ -56,6 +75,14 @@ async function createServer() {
     articleRoutes = articleRoutesModule.articleRoutes;
   } else {
     // Production mode - serve static assets and use pre-built SSR modules
+    // Load robots.txt route first and register it before static file serving
+    const robotsRoutesModule = await import(
+      "../dist/server/routes/robotsRoutes.js"
+    );
+    robotsRoutes = robotsRoutesModule.robotsRoutes;
+    // Register robots.txt route BEFORE static file middleware so Express handles it
+    robotsRoutes(app);
+
     const sirv = (await import("sirv")).default;
     app.use(
       sirv(path.resolve(__dirname, "../dist/client"), { extensions: [] })

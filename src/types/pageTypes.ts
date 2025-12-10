@@ -23,16 +23,16 @@ export interface ArticlesPageData {
 }
 
 export interface Article {
-  id: number;
+  slug: string;
   title: string;
-  content: string;
-  author: string;
+  description: string;
   date: string;
+  "time-to-read": string;
 }
 
 export interface ArticlePageData {
   article: Article;
-  contents: string;
+  content: string;
 }
 
 /**

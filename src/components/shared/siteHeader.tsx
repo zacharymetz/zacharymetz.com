@@ -46,11 +46,11 @@ const Header = () => {
                 gap: "8px",
               }}
             >
-              {/* <img
-                src="/tropicalgalaxy.png"
+              <img
+                src="/coffee.png"
                 alt="Blog.dev"
-                style={{ height: "28px" }}
-              /> */}
+                style={{ height: "20px", marginTop: "2px" }}
+              />
               <span
                 style={{
                   fontSize: "18px",
