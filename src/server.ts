@@ -59,40 +59,40 @@ async function createServer() {
     ssrPageRoutes = ssrPageRoutesModule.ssrPageRoutes;
   } else {
     // Production mode - serve static assets and use pre-built SSR modules
+    // When running from dist/server.js, paths are relative to dist/
+
     // Load robots.txt route first and register it before static file serving
     const robotsRoutesModule = await import(
-      // we have to ignore this because its in the dist
-      // folder but only so during production build
-      //@ts-ignore
-      "../dist/server/routes/robotsRoutes.js"
+      // @ts-ignore - Dynamic import resolved at runtime from dist/
+      "./server/routes/robotsRoutes.js"
     );
     robotsRoutes = robotsRoutesModule.robotsRoutes;
     // Register robots.txt route BEFORE static file middleware so Express handles it
     robotsRoutes(app);
 
     const sirv = (await import("sirv")).default;
-    app.use(
-      sirv(path.resolve(__dirname, "../dist/client"), { extensions: [] })
-    );
+    app.use(sirv(path.resolve(__dirname, "./client"), { extensions: [] }));
 
     // Load pre-built SSR modules (Vite handles CSS and other assets at build time)
     const ssrHelper = await import(
-      // we have to ignore this because its in the dist
-      // folder but only so during production build
-      //@ts-ignore
-      "../dist/server/ssr-helper.js"
+      // @ts-ignore - Dynamic import resolved at runtime from dist/
+      "./server/ssr-helper.js"
     );
     buildSPADocument = ssrHelper.buildSPADocument;
 
     const ssrPageRoutesModule = await import(
-      //@ts-ignore
-      "../dist/server/routes/ssrPageRoutes.js"
+      // @ts-ignore - Dynamic import resolved at runtime from dist/
+      "./server/routes/ssrPageRoutes.js"
     );
     ssrPageRoutes = ssrPageRoutesModule.ssrPageRoutes;
   }
 
-  // Serve static files from public folder
-  app.use(express.static("public"));
+  // Serve static files from public folder (copied to dist/public in production)
+  app.use(
+    express.static(
+      path.resolve(__dirname, isProduction ? "./public" : "../public")
+    )
+  );
 
   // Initialize SSR routes
   ssrPageRoutes(app);
@@ -107,4 +107,7 @@ async function createServer() {
   });
 }
 
-createServer();
+createServer().catch((error) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
+});

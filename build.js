@@ -13,7 +13,7 @@
  */
 
 import { execSync } from 'child_process';
-import { readdirSync, copyFileSync, mkdirSync, existsSync } from 'fs';
+import { readdirSync, copyFileSync, mkdirSync, existsSync, statSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { performance } from 'perf_hooks';
@@ -118,6 +118,42 @@ function runCommand(command, stepName, stepColor, memoryTracker) {
 }
 
 /**
+ * Recursively copies a directory
+ * @param {string} sourceDir - Source directory
+ * @param {string} destDir - Destination directory
+ * @param {Object} memoryTracker - Object tracking max memory usage
+ * @returns {number} Number of files copied
+ */
+function copyDirectory(sourceDir, destDir, memoryTracker) {
+  // Ensure destination directory exists
+  if (!existsSync(destDir)) {
+    mkdirSync(destDir, { recursive: true });
+  }
+  
+  const entries = readdirSync(sourceDir);
+  let copiedCount = 0;
+  
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const sourcePath = join(sourceDir, entry);
+    const destPath = join(destDir, entry);
+    const stat = statSync(sourcePath);
+    
+    if (stat.isDirectory()) {
+      copiedCount += copyDirectory(sourcePath, destPath, memoryTracker);
+    } else {
+      copyFileSync(sourcePath, destPath);
+      log(`  Copied: ${entry}`, colors.cyan);
+      copiedCount++;
+    }
+    
+    checkMemory(memoryTracker);
+  }
+  
+  return copiedCount;
+}
+
+/**
  * Copies posts to dist directory, excluding example-post.md
  * @param {string} sourceDir - Source directory for posts
  * @param {string} destDir - Destination directory for posts
@@ -160,6 +196,20 @@ function copyPosts(sourceDir, destDir, memoryTracker) {
 }
 
 /**
+ * Copies public folder to dist directory
+ * @param {string} sourceDir - Source public directory
+ * @param {string} destDir - Destination public directory
+ * @param {Object} memoryTracker - Object tracking max memory usage
+ */
+function copyPublicFolder(sourceDir, destDir, memoryTracker) {
+  log(`\n${colors.bright}Copying public folder${colors.reset}`, colors.magenta);
+  
+  const copiedCount = copyDirectory(sourceDir, destDir, memoryTracker);
+  
+  log(`✓ Copied ${copiedCount} file(s) to ${destDir}`, colors.green);
+}
+
+/**
  * Main build function
  */
 function main() {
@@ -177,6 +227,8 @@ function main() {
   const rootDir = getCurrentDir();
   const postsSourceDir = join(rootDir, 'posts');
   const postsDestDir = join(rootDir, 'dist', 'posts');
+  const publicSourceDir = join(rootDir, 'public');
+  const publicDestDir = join(rootDir, 'dist', 'public');
   
   log(`${colors.bright}${colors.blue}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}`, colors.blue);
   log(`${colors.bright}${colors.blue}  Starting Build Process${colors.reset}`, colors.blue);
@@ -188,11 +240,23 @@ function main() {
   // Step 1: Build client
   runCommand('yarn vite build', 'Step 1: Building client bundle', colors.blue, memoryTracker);
   
-  // Step 2: Build server
-  runCommand('yarn vite build --config vite.config.server.ts', 'Step 2: Building server bundle', colors.cyan, memoryTracker);
+  // Step 2: Build server SSR modules
+  runCommand('yarn vite build --config vite.config.server.ts', 'Step 2: Building server SSR modules', colors.cyan, memoryTracker);
   
-  // Step 3: Copy posts (excluding example-post.md)
+  // Step 3: Bundle server entry with esbuild
+  // Note: --external:./server/* tells esbuild to not bundle the SSR modules (they're loaded dynamically)
+  runCommand(
+    'yarn esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --external:"./server/*" --external:"./client" --outfile=dist/server.js',
+    'Step 3: Bundling server with esbuild',
+    colors.yellow,
+    memoryTracker
+  );
+  
+  // Step 4: Copy posts (excluding example-post.md)
   copyPosts(postsSourceDir, postsDestDir, memoryTracker);
+  
+  // Step 5: Copy public folder
+  copyPublicFolder(publicSourceDir, publicDestDir, memoryTracker);
   
   // Stop memory monitoring
   clearInterval(memoryInterval);
