@@ -50,7 +50,7 @@ async function createServer() {
     app.use(vite.middlewares);
 
     // Load modules via Vite's SSR loader (with HMR support)
-    const ssrHelper = await vite.ssrLoadModule("/src/ssr/ssr-helper.tsx");
+    const ssrHelper = await vite.ssrLoadModule("/src/ssr-helper.tsx");
     buildSPADocument = ssrHelper.buildSPADocument;
 
     const ssrPageRoutesModule = await vite.ssrLoadModule(

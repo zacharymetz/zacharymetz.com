@@ -15,13 +15,14 @@ export default defineConfig({
     rollupOptions: {
       input: {
         "ssr-helper": "./src/ssr-helper.tsx",
-        "pages/home/homePageRoutes": "./src/pages/home/homePageRoutes.ts",
-        "pages/about/aboutPageRoutes": "./src/pages/about/aboutPageRoutes.ts",
-        "pages/articles/articlesPageRoutes":
-          "./src/pages/articles/articlesPageRoutes.ts",
+        "pages/home/homePageRoutes":
+          "./src/frontend/pages/home/homePageRoutes.ts",
+        "pages/about/aboutPageRoutes":
+          "./src/frontend/pages/about/aboutPageRoutes.ts",
         "pages/post/postPageRoutes":
-          "./src/pages/post/postPageRoutes.ts",
+          "./src/frontend/pages/post/postPageRoutes.ts",
         "routes/robotsRoutes": "./src/routes/robotsRoutes.ts",
+        "routes/ssrPageRoutes": "./src/routes/ssrPageRoutes.ts",
       },
       output: {
         entryFileNames: "[name].js",
@@ -38,4 +39,3 @@ export default defineConfig({
     noExternal: ["lenis", "react-router"],
   },
 });
-

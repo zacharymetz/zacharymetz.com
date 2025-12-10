@@ -5,7 +5,5 @@ export const HOME_PAGE_TITLE = "Zachary Metz.com";
 export const HOME_PAGE_DESCRIPTION = "Zachary Metz's personal website";
 export const ABOUT_PAGE_TITLE = "About Zachary Metz";
 export const ABOUT_PAGE_DESCRIPTION = "About page with full SSR for SEO";
-export const ARTICLES_PAGE_TITLE = "Articles - React SSR";
-export const ARTICLES_PAGE_DESCRIPTION = "Articles page with full SSR for SEO";
 export const POST_PAGE_TITLE = "Post - React SSR";
 export const POST_PAGE_DESCRIPTION = "Post page with full SSR for SEO";

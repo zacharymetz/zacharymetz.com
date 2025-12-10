@@ -6,7 +6,6 @@ import Header from "./components/shared/siteHeader";
 import { SiteFooter } from "./components/shared/siteFooter";
 import { HomePage } from "./pages/home/HomePage";
 import { AboutPage } from "./pages/about/AboutPage";
-import { ArticlesPage } from "./pages/articles/ArticlesPage";
 import { PostPage } from "./pages/post/PostPage";
 import { useSSRContext } from "./components/hooks/useSSRContext";
 
@@ -53,13 +52,12 @@ const App: React.FC<AppProps> = ({ data }) => {
         }}
       >
         <Routes>
+          {/* SSR Routes */}
           <Route path="/" element={<HomePage data={appData.home} />} />
           <Route path="/about" element={<AboutPage data={appData.about} />} />
-          <Route
-            path="/articles"
-            element={<ArticlesPage data={appData.products} />}
-          />
           <Route path="/post/:id" element={<PostPage data={appData.post} />} />
+
+          {/* SPA Routes */}
           <Route
             path="*"
             element={

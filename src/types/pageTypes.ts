@@ -18,10 +18,6 @@ export interface AboutPageData {
   company: string;
 }
 
-export interface ArticlesPageData {
-  articles: Article[];
-}
-
 export interface Article {
   slug: string;
   title: string;
@@ -43,7 +39,7 @@ export interface PostPageData {
 export interface AppData {
   home: HomePageData | null;
   about: AboutPageData | null;
-  products: ArticlesPageData | null;
+  products: null;
   post: PostPageData | null;
 }
 
@@ -56,13 +52,12 @@ export interface AppData {
 export const buildAppDataHelper = (data: {
   home?: HomePageData;
   about?: AboutPageData;
-  articles?: ArticlesPageData;
   post?: PostPageData;
 }): AppData => {
   return {
     home: data.home || null,
     about: data.about || null,
-    products: data.articles || null,
+    products: null,
     post: data.post || null,
   };
 };
