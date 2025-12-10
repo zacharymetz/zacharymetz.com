@@ -28,10 +28,7 @@ async function createServer() {
 
   let vite: ViteDevServer | undefined;
   let buildSPADocument: () => string;
-  let homeRoutes: RouteInitializer;
-  let aboutRoutes: RouteInitializer;
-  let articlesRoutes: RouteInitializer;
-  let postRoutes: RouteInitializer;
+  let ssrPageRoutes: RouteInitializer;
   let robotsRoutes: RouteInitializer;
 
   if (!isProduction) {
@@ -53,30 +50,20 @@ async function createServer() {
     app.use(vite.middlewares);
 
     // Load modules via Vite's SSR loader (with HMR support)
-    const ssrHelper = await vite.ssrLoadModule("/src/ssr-helper.tsx");
+    const ssrHelper = await vite.ssrLoadModule("/src/ssr/ssr-helper.tsx");
     buildSPADocument = ssrHelper.buildSPADocument;
 
-    const homeRoutesModule = await vite.ssrLoadModule(
-      "/src/pages/home/homePageRoutes.ts"
+    const ssrPageRoutesModule = await vite.ssrLoadModule(
+      "/src/routes/ssrPageRoutes.ts"
     );
-    const aboutRoutesModule = await vite.ssrLoadModule(
-      "/src/pages/about/aboutPageRoutes.ts"
-    );
-    const articlesRoutesModule = await vite.ssrLoadModule(
-      "/src/pages/articles/articlesPageRoutes.ts"
-    );
-    const postRoutesModule = await vite.ssrLoadModule(
-      "/src/pages/post/postPageRoutes.ts"
-    );
-
-    homeRoutes = homeRoutesModule.homeRoutes;
-    aboutRoutes = aboutRoutesModule.aboutRoutes;
-    articlesRoutes = articlesRoutesModule.articlesRoutes;
-    postRoutes = postRoutesModule.postRoutes;
+    ssrPageRoutes = ssrPageRoutesModule.ssrPageRoutes;
   } else {
     // Production mode - serve static assets and use pre-built SSR modules
     // Load robots.txt route first and register it before static file serving
     const robotsRoutesModule = await import(
+      // we have to ignore this because its in the dist
+      // folder but only so during production build
+      //@ts-ignore
       "../dist/server/routes/robotsRoutes.js"
     );
     robotsRoutes = robotsRoutesModule.robotsRoutes;
@@ -89,36 +76,26 @@ async function createServer() {
     );
 
     // Load pre-built SSR modules (Vite handles CSS and other assets at build time)
-    const ssrHelper = await import("../dist/server/ssr-helper.js");
+    const ssrHelper = await import(
+      // we have to ignore this because its in the dist
+      // folder but only so during production build
+      //@ts-ignore
+      "../dist/server/ssr-helper.js"
+    );
     buildSPADocument = ssrHelper.buildSPADocument;
 
-    const homeRoutesModule = await import(
-      "../dist/server/pages/home/homePageRoutes.js"
+    const ssrPageRoutesModule = await import(
+      //@ts-ignore
+      "../dist/server/routes/ssrPageRoutes.js"
     );
-    const aboutRoutesModule = await import(
-      "../dist/server/pages/about/aboutPageRoutes.js"
-    );
-    const articlesRoutesModule = await import(
-      "../dist/server/pages/articles/articlesPageRoutes.js"
-    );
-    const postRoutesModule = await import(
-      "../dist/server/pages/post/postPageRoutes.js"
-    );
-
-    homeRoutes = homeRoutesModule.homeRoutes;
-    aboutRoutes = aboutRoutesModule.aboutRoutes;
-    articlesRoutes = articlesRoutesModule.articlesRoutes;
-    postRoutes = postRoutesModule.postRoutes;
+    ssrPageRoutes = ssrPageRoutesModule.ssrPageRoutes;
   }
 
   // Serve static files from public folder
   app.use(express.static("public"));
 
   // Initialize SSR routes
-  homeRoutes(app);
-  aboutRoutes(app);
-  articlesRoutes(app);
-  postRoutes(app);
+  ssrPageRoutes(app);
 
   // Catch-all: SPA mode for all other routes
   app.use((_req: Request, res: Response) => {

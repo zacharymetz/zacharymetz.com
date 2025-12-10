@@ -1,8 +1,8 @@
 import React from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
-import App from "./components/App";
-import { SSRProvider } from "./components/hooks/useSSRContext";
+import App from "./frontend/App";
+import { SSRProvider } from "./frontend/components/hooks/useSSRContext";
 
 const container = document.getElementById("root")!;
 

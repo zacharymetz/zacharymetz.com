@@ -1,5 +1,5 @@
-import { loadAllPosts } from "../../services/posts";
-import { HomePageData, Article } from "../../types/pageTypes";
+import { loadAllPosts } from "../../../services/posts";
+import { HomePageData, Article } from "../../../types/pageTypes";
 
 export const getHomePageData = async (): Promise<HomePageData> => {
   const posts = await loadAllPosts();

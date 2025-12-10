@@ -4,9 +4,9 @@ import { StaticRouter } from "react-router";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import App from "./components/App";
+import App from "./frontend/App";
 import { AppData } from "./types/pageTypes";
-import { SSRProvider } from "./components/hooks/useSSRContext";
+import { SSRProvider } from "./frontend/components/hooks/useSSRContext";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";

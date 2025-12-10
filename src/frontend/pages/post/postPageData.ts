@@ -1,5 +1,5 @@
-import { loadPost } from "../../services/posts";
-import { PostPageData } from "../../types/pageTypes";
+import { loadPost } from "../../../services/posts";
+import { PostPageData } from "../../../types/pageTypes";
 
 export const getPostPageData = async (
   slug: string
@@ -21,4 +21,3 @@ export const getPostPageData = async (
     content: post.content,
   };
 };
-

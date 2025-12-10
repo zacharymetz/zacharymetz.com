@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutPageData, PageProps } from "../../types/pageTypes";
+import { AboutPageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { aboutPageApiRoute } from "./aboutPageConstants";
 

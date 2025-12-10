@@ -1,14 +1,14 @@
 import React from "react";
-import "../styles/global.css";
+import "./styles/global.css";
 import { Routes, Route } from "react-router";
 import { AppData } from "../types/pageTypes";
-import Header from "./shared/siteHeader";
-import { SiteFooter } from "./shared/siteFooter";
-import { HomePage } from "../pages/home/HomePage";
-import { AboutPage } from "../pages/about/AboutPage";
-import { ArticlesPage } from "../pages/articles/ArticlesPage";
-import { PostPage } from "../pages/post/PostPage";
-import { useSSRContext } from "./hooks/useSSRContext";
+import Header from "./components/shared/siteHeader";
+import { SiteFooter } from "./components/shared/siteFooter";
+import { HomePage } from "./pages/home/HomePage";
+import { AboutPage } from "./pages/about/AboutPage";
+import { ArticlesPage } from "./pages/articles/ArticlesPage";
+import { PostPage } from "./pages/post/PostPage";
+import { useSSRContext } from "./components/hooks/useSSRContext";
 
 interface AppProps {
   data?: AppData; // Only passed during SSR on server

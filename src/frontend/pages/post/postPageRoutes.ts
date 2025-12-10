@@ -1,6 +1,6 @@
 import { type Application, Request, Response } from "express";
-import { buildAppDataHelper } from "../../types/pageTypes";
-import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
+import { buildAppDataHelper } from "../../../types/pageTypes";
+import { buildHTMLDocument, renderSSRPage } from "../../../ssr-helper";
 import { getPostPageData } from "./postPageData";
 import { postPageRoute, postPageApiRoute } from "./postPageConstants";
 
@@ -47,4 +47,3 @@ export const postRoutes = (app: Application) => {
     });
   });
 };
-

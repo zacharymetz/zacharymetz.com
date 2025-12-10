@@ -1,5 +1,5 @@
 import React from "react";
-import { ArticlesPageData, PageProps } from "../../types/pageTypes";
+import { ArticlesPageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { articlesPageApiRoute } from "./articlesPageConstants";
 
@@ -26,10 +26,11 @@ export const ArticlesPage: React.FC<PageProps<ArticlesPageData>> = ({
         <div key={article.id}>
           <h2>{article.title}</h2>
           <p>{article.content}</p>
-          <p>By {article.author} on {article.date}</p>
+          <p>
+            By {article.author} on {article.date}
+          </p>
         </div>
       ))}
     </div>
   );
 };
-

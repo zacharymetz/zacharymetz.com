@@ -1,10 +1,10 @@
 import { type Application, Request, Response } from "express";
-import { buildAppDataHelper } from "../../types/pageTypes";
-import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
+import { buildAppDataHelper } from "../../../types/pageTypes";
+import { buildHTMLDocument, renderSSRPage } from "../../../ssr-helper";
 import {
   ARTICLES_PAGE_DESCRIPTION,
   ARTICLES_PAGE_TITLE,
-} from "../../constants";
+} from "../../../constants";
 import { getArticlesPageData } from "./articlesPageData";
 import {
   articlesPageRoute,

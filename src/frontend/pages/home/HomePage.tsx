@@ -1,5 +1,5 @@
 import React from "react";
-import { Article, HomePageData, PageProps } from "../../types/pageTypes";
+import { Article, HomePageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { homePageApiRoute } from "./homePageConstants";
 import { InternalLink } from "../../components/shared/internalLink";

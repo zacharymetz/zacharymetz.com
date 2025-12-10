@@ -1,4 +1,4 @@
-import { AboutPageData } from "../../types/pageTypes";
+import { AboutPageData } from "../../../types/pageTypes";
 
 export const getAboutPageData = async (): Promise<AboutPageData> => {
   return {
@@ -6,4 +6,3 @@ export const getAboutPageData = async (): Promise<AboutPageData> => {
     company: "Tropical Galaxy Inc",
   };
 };
-

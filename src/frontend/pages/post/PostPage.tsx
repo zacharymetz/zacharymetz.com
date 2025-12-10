@@ -1,8 +1,8 @@
 import React from "react";
-import { PostPageData, PageProps } from "../../types/pageTypes";
+import { PostPageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { postPageApiRoute } from "./postPageConstants";
-import { Markdown } from "../../services/markdown-to-jsx";
+import { Markdown } from "../../../services/markdown-to-jsx";
 
 const contentMaxWidth = 736;
 
@@ -18,10 +18,7 @@ export const PostPage: React.FC<PageProps<PostPageData>> = ({
     return postPageApiRoute.replace(":id", slug);
   }, [_data]);
 
-  const { data, loading, error } = usePageData<PostPageData>(
-    _data,
-    apiRoute
-  );
+  const { data, loading, error } = usePageData<PostPageData>(_data, apiRoute);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -51,4 +48,3 @@ export const PostPage: React.FC<PageProps<PostPageData>> = ({
     </article>
   );
 };
-

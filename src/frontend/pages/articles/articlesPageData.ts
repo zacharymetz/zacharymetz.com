@@ -1,4 +1,4 @@
-import { ArticlesPageData } from "../../types/pageTypes";
+import { ArticlesPageData } from "../../../types/pageTypes";
 
 export const getArticlesPageData = async (): Promise<ArticlesPageData> => {
   return {

@@ -1,7 +1,7 @@
 import { type Application, Request, Response } from "express";
-import { buildAppDataHelper } from "../../types/pageTypes";
-import { buildHTMLDocument, renderSSRPage } from "../../ssr-helper";
-import { HOME_PAGE_DESCRIPTION, HOME_PAGE_TITLE } from "../../constants";
+import { buildAppDataHelper } from "../../../types/pageTypes";
+import { buildHTMLDocument, renderSSRPage } from "../../../ssr-helper";
+import { HOME_PAGE_DESCRIPTION, HOME_PAGE_TITLE } from "../../../constants";
 import { getHomePageData } from "./homePageData";
 import { homePageRoute, homePageApiRoute } from "./homePageConstants";
 
