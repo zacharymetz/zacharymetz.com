@@ -2,6 +2,7 @@ import React from "react";
 import { AboutPageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { aboutPageApiRoute } from "./aboutPageConstants";
+import { Loader } from "@/frontend/components/shared/loader";
 
 export const AboutPage: React.FC<PageProps<AboutPageData>> = ({
   data: _data,
@@ -13,7 +14,7 @@ export const AboutPage: React.FC<PageProps<AboutPageData>> = ({
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error || !data) {

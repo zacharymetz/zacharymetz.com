@@ -69,14 +69,14 @@ const Header = () => {
             gap: "16px",
           }}
         >
-          <InternalLink
+          {/* <InternalLink
             href="/about"
             linkStyle={{
               textDecoration: "none",
             }}
           >
             About
-          </InternalLink>
+          </InternalLink> */}
         </div>
       </div>
     </div>

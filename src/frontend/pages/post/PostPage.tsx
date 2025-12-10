@@ -3,6 +3,7 @@ import { PostPageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { postPageApiRoute } from "./postPageConstants";
 import { Markdown } from "../../../services/markdown-to-jsx";
+import { Loader } from "@/frontend/components/shared/loader";
 
 const contentMaxWidth = 736;
 
@@ -21,7 +22,7 @@ export const PostPage: React.FC<PageProps<PostPageData>> = ({
   const { data, loading, error } = usePageData<PostPageData>(_data, apiRoute);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error || !data) {

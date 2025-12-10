@@ -4,6 +4,7 @@ import { usePageData } from "../../components/hooks/usePageData";
 import { homePageApiRoute } from "./homePageConstants";
 import { InternalLink } from "../../components/shared/internalLink";
 import { useDetectIsMobile } from "../../components/hooks/useDetectIsMobile";
+import { Loader } from "@/frontend/components/shared/loader";
 
 export const HomePage: React.FC<PageProps<HomePageData>> = ({
   data: _data,
@@ -14,7 +15,7 @@ export const HomePage: React.FC<PageProps<HomePageData>> = ({
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error || !data) {
