@@ -30,8 +30,8 @@ export interface Article {
   "time-to-read": string;
 }
 
-export interface ArticlePageData {
-  article: Article;
+export interface PostPageData {
+  post: Article;
   content: string;
 }
 
@@ -44,7 +44,7 @@ export interface AppData {
   home: HomePageData | null;
   about: AboutPageData | null;
   products: ArticlesPageData | null;
-  article: ArticlePageData | null;
+  post: PostPageData | null;
 }
 
 /**
@@ -57,13 +57,13 @@ export const buildAppDataHelper = (data: {
   home?: HomePageData;
   about?: AboutPageData;
   articles?: ArticlesPageData;
-  article?: ArticlePageData;
+  post?: PostPageData;
 }): AppData => {
   return {
     home: data.home || null,
     about: data.about || null,
     products: data.articles || null,
-    article: data.article || null,
+    post: data.post || null,
   };
 };
 

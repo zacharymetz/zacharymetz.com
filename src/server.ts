@@ -31,7 +31,7 @@ async function createServer() {
   let homeRoutes: RouteInitializer;
   let aboutRoutes: RouteInitializer;
   let articlesRoutes: RouteInitializer;
-  let articleRoutes: RouteInitializer;
+  let postRoutes: RouteInitializer;
   let robotsRoutes: RouteInitializer;
 
   if (!isProduction) {
@@ -65,14 +65,14 @@ async function createServer() {
     const articlesRoutesModule = await vite.ssrLoadModule(
       "/src/pages/articles/articlesPageRoutes.ts"
     );
-    const articleRoutesModule = await vite.ssrLoadModule(
-      "/src/pages/article/articlePageRoutes.ts"
+    const postRoutesModule = await vite.ssrLoadModule(
+      "/src/pages/post/postPageRoutes.ts"
     );
 
     homeRoutes = homeRoutesModule.homeRoutes;
     aboutRoutes = aboutRoutesModule.aboutRoutes;
     articlesRoutes = articlesRoutesModule.articlesRoutes;
-    articleRoutes = articleRoutesModule.articleRoutes;
+    postRoutes = postRoutesModule.postRoutes;
   } else {
     // Production mode - serve static assets and use pre-built SSR modules
     // Load robots.txt route first and register it before static file serving
@@ -101,14 +101,14 @@ async function createServer() {
     const articlesRoutesModule = await import(
       "../dist/server/pages/articles/articlesPageRoutes.js"
     );
-    const articleRoutesModule = await import(
-      "../dist/server/pages/article/articlePageRoutes.js"
+    const postRoutesModule = await import(
+      "../dist/server/pages/post/postPageRoutes.js"
     );
 
     homeRoutes = homeRoutesModule.homeRoutes;
     aboutRoutes = aboutRoutesModule.aboutRoutes;
     articlesRoutes = articlesRoutesModule.articlesRoutes;
-    articleRoutes = articleRoutesModule.articleRoutes;
+    postRoutes = postRoutesModule.postRoutes;
   }
 
   // Serve static files from public folder
@@ -118,7 +118,7 @@ async function createServer() {
   homeRoutes(app);
   aboutRoutes(app);
   articlesRoutes(app);
-  articleRoutes(app);
+  postRoutes(app);
 
   // Catch-all: SPA mode for all other routes
   app.use((_req: Request, res: Response) => {

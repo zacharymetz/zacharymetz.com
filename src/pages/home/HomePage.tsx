@@ -120,7 +120,7 @@ const HomePageArticleList = ({ articles }: { articles: Article[] }) => {
                 }}
               >
                 <InternalLink
-                  href={`/article/${article.slug}`}
+                  href={`/post/${article.slug}`}
                   linkStyle={{
                     textDecoration: "none",
                   }}

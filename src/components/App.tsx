@@ -7,7 +7,7 @@ import { SiteFooter } from "./shared/siteFooter";
 import { HomePage } from "../pages/home/HomePage";
 import { AboutPage } from "../pages/about/AboutPage";
 import { ArticlesPage } from "../pages/articles/ArticlesPage";
-import { ArticlePage } from "../pages/article/ArticlePage";
+import { PostPage } from "../pages/post/PostPage";
 import { useSSRContext } from "./hooks/useSSRContext";
 
 interface AppProps {
@@ -25,9 +25,9 @@ const App: React.FC<AppProps> = ({ data }) => {
         home: null,
         about: null,
         products: null,
-        article: null,
+        post: null,
       }
-    : { home: null, about: null, products: null, article: null };
+    : { home: null, about: null, products: null, post: null };
 
   return (
     <div
@@ -59,10 +59,7 @@ const App: React.FC<AppProps> = ({ data }) => {
             path="/articles"
             element={<ArticlesPage data={appData.products} />}
           />
-          <Route
-            path="/article/:id"
-            element={<ArticlePage data={appData.article} />}
-          />
+          <Route path="/post/:id" element={<PostPage data={appData.post} />} />
           <Route
             path="*"
             element={

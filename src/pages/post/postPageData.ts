@@ -1,9 +1,9 @@
 import { loadPost } from "../../services/posts";
-import { ArticlePageData } from "../../types/pageTypes";
+import { PostPageData } from "../../types/pageTypes";
 
-export const getArticlePageData = async (
+export const getPostPageData = async (
   slug: string
-): Promise<ArticlePageData | null> => {
+): Promise<PostPageData | null> => {
   const post = await loadPost(slug);
 
   if (!post) {
@@ -11,7 +11,7 @@ export const getArticlePageData = async (
   }
 
   return {
-    article: {
+    post: {
       slug: post.slug,
       title: post.title,
       description: post.description,
@@ -21,3 +21,4 @@ export const getArticlePageData = async (
     content: post.content,
   };
 };
+

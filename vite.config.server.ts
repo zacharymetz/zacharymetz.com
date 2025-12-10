@@ -19,8 +19,8 @@ export default defineConfig({
         "pages/about/aboutPageRoutes": "./src/pages/about/aboutPageRoutes.ts",
         "pages/articles/articlesPageRoutes":
           "./src/pages/articles/articlesPageRoutes.ts",
-        "pages/article/articlePageRoutes":
-          "./src/pages/article/articlePageRoutes.ts",
+        "pages/post/postPageRoutes":
+          "./src/pages/post/postPageRoutes.ts",
         "routes/robotsRoutes": "./src/routes/robotsRoutes.ts",
       },
       output: {

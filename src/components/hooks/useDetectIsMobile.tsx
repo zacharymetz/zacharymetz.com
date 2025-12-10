@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-// Breakpoints based on ArticlePage constants
+// Breakpoints based on PostPage constants
 const pageBreakLarge = 1280;
 const pageBreakMedium = 1024;
 const contentMaxWidth = 736;
