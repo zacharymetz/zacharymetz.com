@@ -17,6 +17,7 @@ export interface TokenData {
 const createTokenPair = (crypto: CryptoType): TokenPair =>
   `${crypto}-USD` as TokenPair;
 
+// the token pairs we care about
 const tokenPairs: TokenPair[] = [
   createTokenPair(CryptoType.BTC),
   createTokenPair(CryptoType.ETH),
