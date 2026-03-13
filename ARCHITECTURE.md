@@ -274,25 +274,10 @@ Once called, this is irreversible. The app will never go back to SSR mode during
 ### State Machine
 
 ```mermaid
-stateDiagram-v2
-    [*] --> SSR_Mode
-    SSR_Mode --> SPA_Mode: clearSSRData()
-
-    state SSR_Mode {
-        note right of SSR_Mode
-            isSSR = true
-            Data source: window.__INITIAL_DATA__
-            Pages receive pre-fetched data via props
-        end note
-    }
-
-    state SPA_Mode {
-        note right of SPA_Mode
-            isSSR = false
-            Data source: fetch() to /api/v1/...
-            Pages receive null, usePageData fetches
-        end note
-    }
+flowchart LR
+    Init["Page loads"] --> SSR["SSR Mode<br/>isSSR = true<br/>Data: window.__INITIAL_DATA__<br/>Pages receive pre-fetched props"]
+    SSR -->|"clearSSRData()<br/>(triggered by InternalLink click)"| SPA["SPA Mode<br/>isSSR = false<br/>Data: fetch /api/v1/...<br/>Pages receive null, usePageData fetches"]
+    SPA -->|"No way back"| SPA
 ```
 
 The transition is triggered by `InternalLink` (see Shared Components). Every time the user clicks an internal navigation link, `clearSSRData()` is called. This ensures that after the first page load (which may be SSR), all subsequent page data is fetched client-side from the JSON API endpoints.
