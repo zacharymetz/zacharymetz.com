@@ -2,7 +2,7 @@ import { loadPost } from "../../../services/posts";
 import { PostPageData } from "../../../types/pageTypes";
 
 export const getPostPageData = async (
-  slug: string
+  slug: string,
 ): Promise<PostPageData | null> => {
   const post = await loadPost(slug);
 

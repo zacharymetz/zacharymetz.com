@@ -34,7 +34,7 @@ export interface AppData {
   about: AboutPageData | null;
   products: null;
   post: PostPageData | null;
-  settings: SettingsPageData | null;  // add this
+  settings: SettingsPageData | null; // add this
 }
 ```
 
@@ -45,14 +45,14 @@ export const buildAppDataHelper = (data: {
   home?: HomePageData;
   about?: AboutPageData;
   post?: PostPageData;
-  settings?: SettingsPageData;  // add this
+  settings?: SettingsPageData; // add this
 }): AppData => {
   return {
     home: data.home || null,
     about: data.about || null,
     products: null,
     post: data.post || null,
-    settings: data.settings || null,  // add this
+    settings: data.settings || null, // add this
   };
 };
 ```
@@ -94,9 +94,15 @@ export const getSettingsPageData = async (): Promise<SettingsPageData> => {
 import { type Application, Request, Response } from "express";
 import { buildAppDataHelper } from "../../../types/pageTypes";
 import { buildHTMLDocument, renderSSRPage } from "../../../ssr-helper";
-import { SETTINGS_PAGE_TITLE, SETTINGS_PAGE_DESCRIPTION } from "../../../constants";
+import {
+  SETTINGS_PAGE_TITLE,
+  SETTINGS_PAGE_DESCRIPTION,
+} from "../../../constants";
 import { getSettingsPageData } from "./settingsPageData";
-import { settingsPageRoute, settingsPageApiRoute } from "./settingsPageConstants";
+import {
+  settingsPageRoute,
+  settingsPageApiRoute,
+} from "./settingsPageConstants";
 
 export const settingsRoutes = (app: Application) => {
   // SSR route -- returns full HTML document
@@ -104,13 +110,13 @@ export const settingsRoutes = (app: Application) => {
     const data = await getSettingsPageData();
     const { html, data: pageData } = renderSSRPage(
       req.url,
-      buildAppDataHelper({ settings: data })
+      buildAppDataHelper({ settings: data }),
     );
     const document = buildHTMLDocument(
       SETTINGS_PAGE_TITLE,
       SETTINGS_PAGE_DESCRIPTION,
       html,
-      pageData
+      pageData,
     );
     res.send(document);
   });
@@ -132,10 +138,12 @@ import { usePageData } from "../../components/hooks/usePageData";
 import { settingsPageApiRoute } from "./settingsPageConstants";
 import { Loader } from "@/frontend/components/shared/loader";
 
-export const SettingsPage: React.FC<PageProps<SettingsPageData>> = ({ data: _data }) => {
+export const SettingsPage: React.FC<PageProps<SettingsPageData>> = ({
+  data: _data,
+}) => {
   const { data, loading, error } = usePageData<SettingsPageData>(
     _data,
-    settingsPageApiRoute
+    settingsPageApiRoute,
   );
 
   if (loading) return <Loader />;
@@ -162,7 +170,7 @@ export const ssrPageRoutes = (app: Application) => {
   homeRoutes(app);
   aboutRoutes(app);
   postRoutes(app);
-  settingsRoutes(app);  // add this
+  settingsRoutes(app); // add this
 };
 ```
 
@@ -172,7 +180,7 @@ export const ssrPageRoutes = (app: Application) => {
 import { SettingsPage } from "./pages/settings/SettingsPage";
 
 // inside <Routes>:
-<Route path="/settings" element={<SettingsPage data={appData.settings} />} />
+<Route path="/settings" element={<SettingsPage data={appData.settings} />} />;
 ```
 
 **`vite.config.server.ts`** -- add the route file as an SSR build entry:
@@ -198,7 +206,7 @@ Just add a route in `src/frontend/App.tsx`:
 import { DashboardPage } from "./pages/dashboard/DashboardPage";
 
 // inside <Routes>, before the * catch-all:
-<Route path="/dashboard" element={<DashboardPage />} />
+<Route path="/dashboard" element={<DashboardPage />} />;
 ```
 
 The component fetches its own data client-side however it wants (hooks, fetch, etc.). No server-side files needed. The catch-all in `src/server.ts` serves `buildSPADocument()` which returns an empty shell, and React Router handles the rest in the browser.
@@ -310,13 +318,13 @@ The page route is used on first load. The API route is used on client-side navig
 
 The 5-step production build (`build.js`):
 
-| Step | What | Output |
-|------|------|--------|
-| 1 | `vite build` | Client bundle -> `dist/client/` (with `.vite/manifest.json`) |
-| 2 | `vite build --config vite.config.server.ts` | SSR modules -> `dist/server/` |
-| 3 | `esbuild src/server.ts --bundle` | Server entry -> `dist/server.js` |
-| 4 | Copy `posts/` | -> `dist/posts/` (excludes `example-post.md`) |
-| 5 | Copy `public/` | -> `dist/public/` |
+| Step | What                                        | Output                                                       |
+| ---- | ------------------------------------------- | ------------------------------------------------------------ |
+| 1    | `vite build`                                | Client bundle -> `dist/client/` (with `.vite/manifest.json`) |
+| 2    | `vite build --config vite.config.server.ts` | SSR modules -> `dist/server/`                                |
+| 3    | `esbuild src/server.ts --bundle`            | Server entry -> `dist/server.js`                             |
+| 4    | Copy `posts/`                               | -> `dist/posts/` (excludes `example-post.md`)                |
+| 5    | Copy `public/`                              | -> `dist/public/`                                            |
 
 Step 3 uses `--external:"./server/*"` so SSR modules stay as separate dynamic imports instead of being inlined. This preserves code-splitting in production.
 

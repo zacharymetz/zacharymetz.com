@@ -1,4 +1,3 @@
-import React from "react";
 import { Article, HomePageData, PageProps } from "../../../types/pageTypes";
 import { usePageData } from "../../components/hooks/usePageData";
 import { homePageApiRoute } from "./homePageConstants";
@@ -11,7 +10,7 @@ export const HomePage: React.FC<PageProps<HomePageData>> = ({
 }) => {
   const { data, loading, error } = usePageData<HomePageData>(
     _data,
-    homePageApiRoute
+    homePageApiRoute,
   );
 
   if (loading) {
@@ -134,143 +133,6 @@ const HomePageArticleList = ({ articles }: { articles: Article[] }) => {
           ))}
         </tbody>
       </table>
-    </div>
-  );
-};
-
-const HomePageHero = () => {
-  const { isMobile, isTablet, isMedium } = useDetectIsMobile();
-  // since i have the breakpoints i can set the content to what i want
-  // it to be on mobile or desktop or what ever
-
-  // asume it starts on large
-  let flexBasis = "350px";
-
-  // set a px value if we are not on mobile or table so we can tune it
-  if (isTablet || isMobile) {
-    flexBasis = "250px";
-  }
-  if (isMedium) {
-    flexBasis = "300px";
-  }
-
-  // now we need to adjust the image size
-  let imageSize = "500px";
-
-  if (isTablet) {
-    imageSize = "350px";
-  }
-  if (isMedium) {
-    imageSize = "475px";
-  }
-  if (isMobile) {
-    imageSize = "275px";
-  }
-  return (
-    <div
-      style={{
-        height: "700px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: isMobile ? "8px" : "16px",
-        width: "100%",
-        backgroundImage: `
-      repeating-linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0.1) 6px,
-        rgba(255, 255, 255, 0.4) 2px,
-        rgba(255, 255, 255, 0.4) 7px
-      ),
-      linear-gradient(#321cb0, #6049a6, #c979bb)
-    `.trim(),
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          maxWidth: "900px",
-          flexGrow: 1,
-          padding: "32px",
-          flexWrap: "wrap",
-        }}
-      >
-        <div
-          style={{
-            zIndex: 10,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            flexBasis: flexBasis,
-            color: "white",
-          }}
-        >
-          <h1
-            style={{
-              letterSpacing: "0.01em",
-            }}
-          >
-            Welcome to Galaxy of Code
-          </h1>
-
-          <p
-            style={{
-              marginBottom: "32px",
-              fontSize: "1.2rem",
-            }}
-          >
-            Just throwing my curiosities out into the void. Web dev, AI, crypto,
-            hacking, and pretty much everything else in the galaxy of code.
-          </p>
-
-          <InternalLink
-            href={`/posts/asd`}
-            linkStyle={{
-              border: "none",
-              backgroundColor: "#292827",
-              color: "white",
-              height: "45px",
-              borderRadius: "25px",
-              width: "290px",
-              borderColor: "#292827",
-              fontSize: "1.7rem",
-              fontFamily: "Georgia",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textDecoration: "none",
-            }}
-          >
-            I'm feeling lucky
-          </InternalLink>
-        </div>
-
-        <div
-          style={{
-            flexGrow: 1,
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            zIndex: 10,
-            // if we are mobile then we need to have it be 100%
-            // if we are not mobile then we need to have it be 50%
-            width: isMobile ? "100%" : undefined,
-            // add padding to the top of the image if we are mobile
-            paddingTop: isMobile ? "32px" : undefined,
-            paddingRight: isMobile ? "32px" : undefined,
-          }}
-        >
-          <img
-            src={"/subject.svg"}
-            alt="tmp"
-            style={{
-              width: imageSize,
-              height: imageSize,
-            }}
-          />
-        </div>
-      </div>
     </div>
   );
 };

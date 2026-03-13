@@ -37,7 +37,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
       elements.push(
         <code key={getKey(counter)} className="md-inline-code">
           {inlineCodeMatch[1]}
-        </code>
+        </code>,
       );
       remaining = remaining.slice(inlineCodeMatch[0].length);
       continue;
@@ -48,7 +48,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
     // ![alt](url left), ![alt](url =300 right), ![alt](url "title" =300 center)
     // ![alt](url inline) - for inline images that size to their container
     const imageMatch = remaining.match(
-      /^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?(?:\s+=(\d+)(?:x(\d+))?)?(?:\s+(left|center|right|inline))?\)/
+      /^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?(?:\s+=(\d+)(?:x(\d+))?)?(?:\s+(left|center|right|inline))?\)/,
     );
     if (imageMatch) {
       const [, alt, src, title, widthStr, heightStr, align] = imageMatch;
@@ -77,7 +77,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
             title={title || undefined}
             className="md-image-inline"
             style={Object.keys(style).length > 0 ? style : undefined}
-          />
+          />,
         );
       } else {
         elements.push(
@@ -92,7 +92,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
               className="md-image"
               style={Object.keys(style).length > 0 ? style : undefined}
             />
-          </span>
+          </span>,
         );
       }
       remaining = remaining.slice(imageMatch[0].length);
@@ -101,7 +101,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
 
     // Check for links [text](url "title")
     const linkMatch = remaining.match(
-      /^\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/
+      /^\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/,
     );
     if (linkMatch) {
       elements.push(
@@ -112,7 +112,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
           className="md-link"
         >
           {parseInline(linkMatch[1], counter)}
-        </a>
+        </a>,
       );
       remaining = remaining.slice(linkMatch[0].length);
       continue;
@@ -124,7 +124,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
       elements.push(
         <del key={getKey(counter)} className="md-strikethrough">
           {parseInline(strikeMatch[1], counter)}
-        </del>
+        </del>,
       );
       remaining = remaining.slice(strikeMatch[0].length);
       continue;
@@ -138,7 +138,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
           <em className="md-italic">
             {parseInline(boldItalicMatch[2], counter)}
           </em>
-        </strong>
+        </strong>,
       );
       remaining = remaining.slice(boldItalicMatch[0].length);
       continue;
@@ -150,7 +150,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
       elements.push(
         <strong key={getKey(counter)} className="md-bold">
           {parseInline(boldMatch[2], counter)}
-        </strong>
+        </strong>,
       );
       remaining = remaining.slice(boldMatch[0].length);
       continue;
@@ -162,7 +162,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
       elements.push(
         <em key={getKey(counter)} className="md-italic">
           {parseInline(italicMatch[2], counter)}
-        </em>
+        </em>,
       );
       remaining = remaining.slice(italicMatch[0].length);
       continue;
@@ -170,14 +170,14 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
 
     // Check for auto-linked URLs
     const urlMatch = remaining.match(
-      /^<(https?:\/\/[^>]+)>|^(https?:\/\/[^\s<]+)/
+      /^<(https?:\/\/[^>]+)>|^(https?:\/\/[^\s<]+)/,
     );
     if (urlMatch) {
       const url = urlMatch[1] || urlMatch[2];
       elements.push(
         <a key={getKey(counter)} href={url} className="md-link md-autolink">
           {url}
-        </a>
+        </a>,
       );
       remaining = remaining.slice(urlMatch[0].length);
       continue;
@@ -216,7 +216,7 @@ function parseInline(text: string, counter: KeyCounter): ReactNode[] {
 function parseTable(
   lines: string[],
   startIndex: number,
-  counter: KeyCounter
+  counter: KeyCounter,
 ): { element: ReactNode; endIndex: number } {
   const tableLines: string[] = [];
   let i = startIndex;
@@ -254,7 +254,7 @@ function parseTable(
     line
       .split("|")
       .map((cell) => cell.trim())
-      .filter((cell) => cell !== "")
+      .filter((cell) => cell !== ""),
   );
 
   const element = (
@@ -298,7 +298,7 @@ function parseList(
   lines: string[],
   startIndex: number,
   baseIndent: number,
-  counter: KeyCounter
+  counter: KeyCounter,
 ): { element: ReactNode; endIndex: number } {
   const firstLine = lines[startIndex];
   const isOrdered = /^\s*\d+\.\s/.test(firstLine);
@@ -341,7 +341,7 @@ function parseList(
             lines,
             j,
             nextIndent,
-            counter
+            counter,
           );
           if (subList) {
             subElements.push(subList);
@@ -398,7 +398,7 @@ function parseList(
 function parseCodeBlock(
   lines: string[],
   startIndex: number,
-  counter: KeyCounter
+  counter: KeyCounter,
 ): { element: ReactNode; endIndex: number } {
   const firstLine = lines[startIndex];
 
@@ -455,7 +455,7 @@ function parseCodeBlock(
 function parseBlockquote(
   lines: string[],
   startIndex: number,
-  counter: KeyCounter
+  counter: KeyCounter,
 ): { element: ReactNode; endIndex: number } {
   const quoteLines: string[] = [];
   let i = startIndex;
@@ -520,7 +520,7 @@ function parseHeader(line: string, counter: KeyCounter): ReactNode | null {
     return createElement(
       `h${level}`,
       { key: getKey(counter), className: `md-header md-h${level}` },
-      parseInline(content, counter)
+      parseInline(content, counter),
     );
   }
   return null;
@@ -531,7 +531,7 @@ function parseHeader(line: string, counter: KeyCounter): ReactNode | null {
  */
 function isSetextHeader(
   currentLine: string,
-  nextLine: string | undefined
+  nextLine: string | undefined,
 ): { level: 1 | 2; content: string } | null {
   if (!nextLine || currentLine.trim() === "") return null;
 
@@ -607,8 +607,8 @@ function parseMarkdownBlock(markdown: string, counter: KeyCounter): ReactNode {
             key: getKey(counter),
             className: `md-header md-h${setextHeader.level}`,
           },
-          parseInline(setextHeader.content, counter)
-        )
+          parseInline(setextHeader.content, counter),
+        ),
       );
       i += 2; // Skip both lines
       continue;
@@ -697,7 +697,7 @@ function parseMarkdownBlock(markdown: string, counter: KeyCounter): ReactNode {
             key={getKey(counter)}
             className="md-html"
             dangerouslySetInnerHTML={{ __html: htmlLines.join("\n") }}
-          />
+          />,
         );
         i = j + 1;
         continue;
@@ -754,7 +754,7 @@ function parseMarkdownBlock(markdown: string, counter: KeyCounter): ReactNode {
     elements.push(
       <p key={getKey(counter)} className="md-paragraph">
         {paragraphContent}
-      </p>
+      </p>,
     );
     i = j;
   }

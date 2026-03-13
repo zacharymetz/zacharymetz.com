@@ -12,19 +12,19 @@ export const aboutRoutes = (app: Application) => {
 
     const { html, data: pageData } = renderSSRPage(
       req.url, // pass the entire url into here
-      buildAppDataHelper({ about: data })
+      buildAppDataHelper({ about: data }),
     );
     const document = buildHTMLDocument(
       ABOUT_PAGE_TITLE,
       ABOUT_PAGE_DESCRIPTION,
       html,
-      pageData
+      pageData,
     );
 
     res.send(document);
   });
 
-  app.get(aboutPageApiRoute, async (req: Request, res: Response) => {
+  app.get(aboutPageApiRoute, async (_req: Request, res: Response) => {
     const data = await getAboutPageData();
     res.json({
       data,

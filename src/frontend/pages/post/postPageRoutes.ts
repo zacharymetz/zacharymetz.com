@@ -18,13 +18,13 @@ export const postRoutes = (app: Application) => {
 
     const { html, data: pageData } = renderSSRPage(
       req.url,
-      buildAppDataHelper({ post: data })
+      buildAppDataHelper({ post: data }),
     );
     const document = buildHTMLDocument(
       data.post.title,
       data.post.description,
       html,
-      pageData
+      pageData,
     );
 
     res.send(document);

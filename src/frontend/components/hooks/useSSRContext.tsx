@@ -21,7 +21,7 @@ interface SSRProviderProps {
 
 export const SSRProvider: React.FC<SSRProviderProps> = ({ children }) => {
   const [isSSR, setIsSSR] = useState<boolean>(
-    typeof window !== "undefined" ? window.__SSR__ : true
+    typeof window !== "undefined" ? window.__SSR__ : true,
   );
 
   /**

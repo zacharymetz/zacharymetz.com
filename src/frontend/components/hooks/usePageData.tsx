@@ -28,7 +28,7 @@ import { useState, useEffect } from "react";
  */
 export function usePageData<T>(
   initialData: T | null,
-  apiRoute: string
+  apiRoute: string,
 ): { data: T | null; loading: boolean; error: Error | null } {
   const [data, setData] = useState<T | null>(initialData);
   const [loading, setLoading] = useState(!initialData);

@@ -33,14 +33,14 @@ const REQUIRED_KEYS: (keyof MarkdownMetadata)[] = [
  * @throws Error if required metadata keys are missing
  */
 export function parseMarkdownMetadata(
-  fileContent: string
+  fileContent: string,
 ): ParseMarkdownResult {
   // Check if file starts with frontmatter delimiter
   if (!fileContent.trim().startsWith("---")) {
     throw new Error(
       `Markdown file must start with frontmatter delimiter (---). Missing required keys: ${REQUIRED_KEYS.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
@@ -49,21 +49,21 @@ export function parseMarkdownMetadata(
   if (firstDelimiterIndex === -1) {
     throw new Error(
       `Markdown file must have frontmatter delimiter (---). Missing required keys: ${REQUIRED_KEYS.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
   // Find the second occurrence of --- (end of frontmatter)
   const afterFirstDelimiter = fileContent.indexOf(
     "---",
-    firstDelimiterIndex + 3
+    firstDelimiterIndex + 3,
   );
   if (afterFirstDelimiter === -1) {
     throw new Error(
       `Markdown file must have closing frontmatter delimiter (---). Missing required keys: ${REQUIRED_KEYS.join(
-        ", "
-      )}`
+        ", ",
+      )}`,
     );
   }
 
@@ -109,8 +109,8 @@ export function parseMarkdownMetadata(
   if (missingKeys.length > 0) {
     throw new Error(
       `Missing required metadata keys: ${missingKeys.join(
-        ", "
-      )}. Required keys are: ${REQUIRED_KEYS.join(", ")}`
+        ", ",
+      )}. Required keys are: ${REQUIRED_KEYS.join(", ")}`,
     );
   }
 

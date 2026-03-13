@@ -119,6 +119,7 @@ flowchart LR
 In development, `vite.ssrLoadModule()` loads TypeScript source files directly with full HMR support. In production, the modules are pre-built to `dist/server/` and loaded via standard dynamic `import()` with `// @ts-ignore` annotations since the paths only exist at runtime.
 
 The server also:
+
 - Disables the default Express `x-powered-by` header and replaces it with fake ASP.NET/IIS headers (a humorous touch).
 - Reads `PORT` from environment variables, defaulting to `3000`.
 - In production, resolves all paths relative to `__dirname` (which is `dist/` when running `dist/server.js`).
@@ -136,7 +137,7 @@ This file is the core of the SSR system. It exports three functions that the res
 Renders the full React application to an HTML string on the server.
 
 ```typescript
-function renderSSRPage(url: string, data: AppData): SSRResult
+function renderSSRPage(url: string, data: AppData): SSRResult;
 ```
 
 Wraps `<App data={data} />` inside `<StaticRouter location={url}>` and `<SSRProvider>`, then calls `renderToString()` from `react-dom/server`. Returns `{ html, data }`.
@@ -153,11 +154,12 @@ function buildHTMLDocument(
   description: string,
   html: string,
   data: AppData,
-  isSSR: boolean = true
-): string
+  isSSR: boolean = true,
+): string;
 ```
 
 The generated document includes:
+
 - `<meta>` tags for title and description (SEO).
 - Favicon link (`/coffee.png` for SSR pages).
 - CSS `<link>` tags (from manifest in production, empty in dev since Vite injects them).
@@ -171,10 +173,11 @@ The generated document includes:
 Generates a minimal HTML shell for SPA-only routes.
 
 ```typescript
-function buildSPADocument(): string
+function buildSPADocument(): string;
 ```
 
 Similar to `buildHTMLDocument` but with:
+
 - Empty `<div id="root"></div>` (no pre-rendered content).
 - `window.__SSR__ = false` (triggers fresh client render).
 - Different favicon (`/tropicalgalaxy.png`).
@@ -259,12 +262,14 @@ The SSR context is a React context that tracks whether the app is currently usin
 ### SSRProvider
 
 The provider component wraps the entire app. It holds:
+
 - `isSSR: boolean` -- initialized from `window.__SSR__` on the client, defaults to `true` on the server.
 - `clearSSRData()` -- a callback that permanently transitions the app to SPA mode.
 
 ### clearSSRData()
 
 When called:
+
 1. Sets `window.__SSR__ = false`.
 2. Sets `window.__INITIAL_DATA__ = undefined`.
 3. Sets React state `isSSR` to `false`.
@@ -297,8 +302,8 @@ The `usePageData` hook is the bridge between SSR data and client-side fetching. 
 ```typescript
 function usePageData<T>(
   initialData: T | null,
-  apiRoute: string
-): { data: T | null; loading: boolean; error: Error | null }
+  apiRoute: string,
+): { data: T | null; loading: boolean; error: Error | null };
 ```
 
 ### Decision Flow
@@ -352,7 +357,13 @@ On the server, `renderSSRPage()` passes the `AppData` object as a prop. On the c
 
 ```typescript
 const appData: AppData = isSSR
-  ? data || window.__INITIAL_DATA__ || { home: null, about: null, products: null, post: null }
+  ? data ||
+    window.__INITIAL_DATA__ || {
+      home: null,
+      about: null,
+      products: null,
+      post: null,
+    }
   : { home: null, about: null, products: null, post: null };
 ```
 
@@ -360,12 +371,12 @@ When `isSSR` is true, the component tries the server-provided prop first, then f
 
 ### Route Table
 
-| Path | Component | Data Prop |
-|------|-----------|-----------|
-| `/` | `HomePage` | `appData.home` |
-| `/about` | `AboutPage` | `appData.about` |
-| `/post/:id` | `PostPage` | `appData.post` |
-| `*` | SPA fallback (inline) | None |
+| Path        | Component             | Data Prop       |
+| ----------- | --------------------- | --------------- |
+| `/`         | `HomePage`            | `appData.home`  |
+| `/about`    | `AboutPage`           | `appData.about` |
+| `/post/:id` | `PostPage`            | `appData.post`  |
+| `*`         | SPA fallback (inline) | None            |
 
 ### Layout
 
@@ -409,7 +420,7 @@ Only one slot is ever populated at a time (the slot matching the current SSR rou
 Convenience function so route handlers don't have to manually set every null field:
 
 ```typescript
-buildAppDataHelper({ home: data })
+buildAppDataHelper({ home: data });
 // returns { home: data, about: null, products: null, post: null }
 ```
 
@@ -618,6 +629,7 @@ Throws an error with a descriptive message if required keys are missing or delim
 A filesystem-based content management system.
 
 **`getPostsDirectory()`** resolves the posts folder:
+
 - Production: `dist/posts/` (posts are copied there during build).
 - Development: `posts/` from the project root.
 
@@ -673,6 +685,7 @@ flowchart TD
 ```
 
 **Key design decisions:**
+
 - Uses a `KeyCounter` object (`{ value: number }`) passed through all parsing functions. This produces deterministic React keys (`md-0`, `md-1`, ...) that are identical between server and client renders, preventing hydration mismatches.
 - Images support extended syntax: `![alt](url "title" =WxH alignment)` where width, height, and alignment (left/center/right/inline) are optional.
 - Images use `<span>` wrappers instead of `<div>` to avoid hydration errors when images appear inside `<p>` tags.
@@ -682,7 +695,7 @@ flowchart TD
 The `Markdown` component provides a convenient wrapper:
 
 ```typescript
-function Markdown({ content, className }: MarkdownProps): React.ReactElement
+function Markdown({ content, className }: MarkdownProps): React.ReactElement;
 ```
 
 It renders `markdownToJsx(content)` inside a `<div className="md-content">`, which applies the global markdown styles from `global.css`.
@@ -707,6 +720,7 @@ Every internal navigation in the app should use `InternalLink` instead of `<Link
 ### Loader (`src/frontend/components/shared/loader.tsx`)
 
 An animated SVG loader that reveals the letters "ZM" (Zachary Metz) using a stroke-dasharray animation. The animation has five phases:
+
 1. Animate the third stroke segment (reveal the letters).
 2. Pause for 1 second.
 3. Animate the second stroke segment (fill effect).
@@ -718,6 +732,7 @@ Used as the loading state by all page components when `usePageData` is fetching.
 ### Header (`src/frontend/components/shared/siteHeader.tsx`)
 
 A fixed-position header (`position: fixed`, `z-index: 1000`, `height: 56px`) with:
+
 - Site logo (`/coffee.png`) and name ("Zachary Metz.com") linking to `/` via `InternalLink`.
 - Space for navigation links (currently commented out).
 - White background with bottom border.
@@ -726,6 +741,7 @@ A fixed-position header (`position: fixed`, `z-index: 1000`, `height: 56px`) wit
 ### SiteFooter (`src/frontend/components/shared/siteFooter.tsx`)
 
 Footer component containing:
+
 - Copyright notice.
 - Link to tropicalgalaxy.io with logo.
 - Live cryptocurrency price ticker (via `useCryptoPrices` hook) showing BTC, ETH, SOL, XMR with 24h change percentages.
@@ -742,19 +758,23 @@ A responsive breakpoint hook built on React's `useSyncExternalStore`.
 
 **Breakpoints:**
 
-| Screen Size | Width Range | ID |
-|-------------|------------|-----|
-| Mobile | < 736px | `mobile` |
-| Tablet | 736px - 1023px | `tablet` |
-| Medium | 1024px - 1279px | `medium` |
-| Large | >= 1280px | `large` |
+| Screen Size | Width Range     | ID       |
+| ----------- | --------------- | -------- |
+| Mobile      | < 736px         | `mobile` |
+| Tablet      | 736px - 1023px  | `tablet` |
+| Medium      | 1024px - 1279px | `medium` |
+| Large       | >= 1280px       | `large`  |
 
 **Returns** `ScreenSizeInfo`:
+
 ```typescript
-{ width, screenSize, isMobile, isTablet, isMedium, isLarge }
+{
+  (width, screenSize, isMobile, isTablet, isMedium, isLarge);
+}
 ```
 
 **Implementation details:**
+
 - Subscribes to `window.resize` events via `useSyncExternalStore`.
 - Caches the snapshot object and only creates a new one when the `screenSize` category changes (not on every pixel of resize). This prevents unnecessary re-renders.
 - SSR default: returns `mobile` (736px - 1) to ensure server and client produce the same initial render for the smallest common denominator.
@@ -770,6 +790,7 @@ A WebSocket-based live price feed.
 **Message format:** Listens for `TYPE === "1101"` messages containing `VALUE` (current price) and `MOVING_24_HOUR_CHANGE_PERCENTAGE` (24h change).
 
 **Returns:**
+
 ```typescript
 {
   tokensData: Record<TokenPair, { price: number, priceChange: number }>,
@@ -856,6 +877,7 @@ flowchart TD
 ### esbuild Step (Step 3)
 
 Bundles `src/server.ts` into a single `dist/server.js` with these critical flags:
+
 - `--platform=node` -- target Node.js environment.
 - `--format=esm` -- output ESM (the project uses `"type": "module"`).
 - `--packages=external` -- all `node_modules` dependencies stay as external imports (not bundled).
@@ -867,6 +889,7 @@ This keeps `dist/server.js` small and allows SSR modules to be loaded lazily at 
 ### build.js Features
 
 The build orchestrator includes:
+
 - Sequential step execution with colored terminal output.
 - Memory tracking via `process.memoryUsage()` with periodic polling (every 500ms).
 - Final build statistics: total time, max heap usage, final memory breakdown.
@@ -881,6 +904,7 @@ The build orchestrator includes:
 Imported in `App.tsx`. Contains:
 
 **Base reset:**
+
 - Removes default margin/padding on `html` and `body`.
 - Sets system font stack and text color (`rgb(55, 53, 47)` -- Notion-like dark gray).
 - Ensures full viewport height and prevents horizontal overflow.
@@ -889,21 +913,21 @@ Imported in `App.tsx`. Contains:
 
 All markdown-rendered content is styled through CSS classes applied by `markdown-to-jsx.tsx`:
 
-| Class | Element | Key Styles |
-|-------|---------|------------|
-| `.md-content` | Wrapper | `line-height: 1.7`, `font-size: 1rem` |
-| `.md-h1` through `.md-h6` | Headers | Decreasing sizes from `2.25em` to `1em` |
-| `.md-paragraph` | Paragraphs | `1em` vertical margin |
-| `.md-bold` / `.md-italic` | Emphasis | `font-weight: 600` / `font-style: italic` |
-| `.md-link` | Links | Blue (#0366d6), underline on hover |
-| `.md-image-wrapper` | Block images | Flex with alignment classes (left/center/right) |
-| `.md-image-inline` | Inline images | `display: inline`, size scales with font |
-| `.md-inline-code` | Inline code | Gray background, monospace font |
-| `.md-code-block` | Code blocks | Dark theme (#1e1e1e bg), monospace, rounded |
-| `.md-ordered-list` / `.md-unordered-list` | Lists | Nested list style progression (disc > circle > square) |
-| `.md-table` | Tables | Collapsed borders, striped rows, full width |
-| `.md-blockquote` | Blockquotes | Left border, gray background, muted text |
-| `.md-hr` | Horizontal rules | 2px top border |
+| Class                                     | Element          | Key Styles                                             |
+| ----------------------------------------- | ---------------- | ------------------------------------------------------ |
+| `.md-content`                             | Wrapper          | `line-height: 1.7`, `font-size: 1rem`                  |
+| `.md-h1` through `.md-h6`                 | Headers          | Decreasing sizes from `2.25em` to `1em`                |
+| `.md-paragraph`                           | Paragraphs       | `1em` vertical margin                                  |
+| `.md-bold` / `.md-italic`                 | Emphasis         | `font-weight: 600` / `font-style: italic`              |
+| `.md-link`                                | Links            | Blue (#0366d6), underline on hover                     |
+| `.md-image-wrapper`                       | Block images     | Flex with alignment classes (left/center/right)        |
+| `.md-image-inline`                        | Inline images    | `display: inline`, size scales with font               |
+| `.md-inline-code`                         | Inline code      | Gray background, monospace font                        |
+| `.md-code-block`                          | Code blocks      | Dark theme (#1e1e1e bg), monospace, rounded            |
+| `.md-ordered-list` / `.md-unordered-list` | Lists            | Nested list style progression (disc > circle > square) |
+| `.md-table`                               | Tables           | Collapsed borders, striped rows, full width            |
+| `.md-blockquote`                          | Blockquotes      | Left border, gray background, muted text               |
+| `.md-hr`                                  | Horizontal rules | 2px top border                                         |
 
 ### TypeScript CSS Declarations (`src/types/css.d.ts`)
 
@@ -917,6 +941,7 @@ declare module '*.module.css' { ... }
 ### CSS Modules Configuration
 
 Both Vite configs enable CSS Modules with:
+
 - `localsConvention: "camelCase"` -- class names like `my-class` can be accessed as `myClass` in JS.
 - `generateScopedName: "[name]__[local]--[hash:base64:5]"` -- BEM-like scoped names with hash for uniqueness.
 

@@ -41,7 +41,7 @@ async function createServer() {
 
     // Load robots.txt route module via Vite SSR loader (before adding middleware)
     const robotsRoutesModule = await vite.ssrLoadModule(
-      "/src/routes/robotsRoutes.ts"
+      "/src/routes/robotsRoutes.ts",
     );
     robotsRoutes = robotsRoutesModule.robotsRoutes;
     // Register robots.txt route BEFORE Vite middleware so Express handles it
@@ -54,7 +54,7 @@ async function createServer() {
     buildSPADocument = ssrHelper.buildSPADocument;
 
     const ssrPageRoutesModule = await vite.ssrLoadModule(
-      "/src/routes/ssrPageRoutes.ts"
+      "/src/routes/ssrPageRoutes.ts",
     );
     ssrPageRoutes = ssrPageRoutesModule.ssrPageRoutes;
   } else {
@@ -90,8 +90,8 @@ async function createServer() {
   // Serve static files from public folder (copied to dist/public in production)
   app.use(
     express.static(
-      path.resolve(__dirname, isProduction ? "./public" : "../public")
-    )
+      path.resolve(__dirname, isProduction ? "./public" : "../public"),
+    ),
   );
 
   // Initialize SSR routes

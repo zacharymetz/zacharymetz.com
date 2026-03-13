@@ -1,4 +1,3 @@
-import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
 import fs from "node:fs";
@@ -18,7 +17,7 @@ if (isProduction) {
     // In production, ssr-helper.js is in dist/server/, manifest is in dist/client/
     const manifestPath = path.resolve(
       __dirname,
-      "../client/.vite/manifest.json"
+      "../client/.vite/manifest.json",
     );
     manifest = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
   } catch {
@@ -37,7 +36,7 @@ export function renderSSRPage(url: string, data: AppData): SSRResult {
       <SSRProvider>
         <App data={data} />
       </SSRProvider>
-    </StaticRouter>
+    </StaticRouter>,
   );
 
   return { html, data };
@@ -86,7 +85,7 @@ export function buildHTMLDocument(
   description: string,
   html: string,
   data: AppData,
-  isSSR: boolean = true
+  isSSR: boolean = true,
 ): string {
   const { scripts, styles } = getAssetTags();
 

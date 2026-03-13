@@ -27,7 +27,7 @@ const tokenPairs: TokenPair[] = [
 export const useCryptoPrices = () => {
   // Use a single state object to store all token data
   const [tokensData, setTokensData] = useState<Record<TokenPair, TokenData>>(
-    {} as Record<TokenPair, TokenData>
+    {} as Record<TokenPair, TokenData>,
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const useCryptoPrices = () => {
             groups: ["VALUE", "LAST_UPDATE", "MOVING_24_HOUR"],
             market: "cadli",
             instruments: [pair],
-          })
+          }),
         );
       });
     };

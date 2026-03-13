@@ -10,7 +10,7 @@ export const AboutPage: React.FC<PageProps<AboutPageData>> = ({
   console.log("AboutPage", _data, aboutPageApiRoute);
   const { data, loading, error } = usePageData<AboutPageData>(
     _data,
-    aboutPageApiRoute
+    aboutPageApiRoute,
   );
 
   if (loading) {
